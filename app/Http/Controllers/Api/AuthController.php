@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
-use http\Env\Response;
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -40,7 +41,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'user' => $user,
-            'authorisation' => [
+            'authorization' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
@@ -73,28 +74,38 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'User created successfully',
             'user' => $user,
-            'authorisation' => [
+            'authorization' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
         ]);
     }
 
-    public function logout()
+    // Import the JWTAuth facade
+
+    public function logout(Request $request)
     {
-        Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+        try {
+            JWTAuth::invalidate($request->token); // Call invalidate() via the facade
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Successfully logged out',
+            ]);
+        } catch (JWTException $exception) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage(),
+            ]);
+        }
     }
+
 
     public function refresh()
     {
         return response()->json([
             'status' => 'success',
             'user' => Auth::user(),
-            'authorisation' => [
+            'authorization' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',
             ]
