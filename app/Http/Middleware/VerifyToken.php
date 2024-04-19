@@ -25,13 +25,13 @@ class VerifyToken
             }
         }catch (\Exception $exception){
             if ($exception instanceof TokenInvalidException){
-                return response()->json(['msg'=>'Token Is Invalid']);
+                return response()->json(['message'=>'Token Is Invalid']);
             }
             elseif ($exception instanceof TokenExpiredException){
-                return response()->json(['msg'=>'Token Is expired']);
+                return response()->json(['message'=>'Token Is expired']);
             }
             else{
-                return response()->json(['msg'=>'another exception']);
+                return response()->json(['message'=>'another exception']);
             }
         }
         return $next($request);
