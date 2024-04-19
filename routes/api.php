@@ -28,3 +28,6 @@ Route::get('/home',[HomeController::class,'index']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::resource('hotels',\App\Http\Controllers\HotelController::class)->middleware('verify.token');
+Route::post('bookRoom',[\App\Http\Controllers\BookingRoomController::class,'bookingRoom']);
