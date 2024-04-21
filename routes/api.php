@@ -30,10 +30,10 @@
         return $request->user();
     });
 
-    Route::resource('hotels', \App\Http\Controllers\HotelController::class)->middleware('verify.token');
-    Route::post('bookRoom',[\App\Http\Controllers\BookingRoomController::class,'bookingRoom']);
+    Route::resource('hotels', \App\Http\Controllers\HotelController::class)->middleware(['auth:api','verify.token']);
+    Route::post('bookRoom',[\App\Http\Controllers\BookingRoomController::class,'bookingRoom'])->middleware(['auth:api','verify.token']);
 
-    Route::group(['middleware' => [ 'verify.token']], function () {
+    Route::group(['middleware' => [ 'auth:api','verify.token']], function () {
         Route::get('restaurants', [RestaurantController::class, 'index']);
         Route::get('restaurant_details/{restaurant_id}', [RestaurantController::class, 'restaurantDetails']);
         Route::post('bookRestaurant/{id}', [RestaurantController::class, 'bookRestaurant']);
