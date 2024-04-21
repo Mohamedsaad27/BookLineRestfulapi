@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room_Booking;
-use Faker\Provider\en_IN\Internet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -51,7 +49,7 @@ class BookingRoomController extends Controller
         ]);
 
 
-        return response()->json($data,200);
+        return response()->json($data,'200');
     }
 
 
