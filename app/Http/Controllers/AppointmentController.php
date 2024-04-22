@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 class AppointmentController extends Controller
 {
     public function doctors(){
-
         try {
             $doctors = Doctor::all();
             if($doctors->isEmpty()){

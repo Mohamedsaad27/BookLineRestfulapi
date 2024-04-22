@@ -22,7 +22,7 @@ class HomeController extends Controller
             }else{
                 return response()->json([
                     'message'=>'User Founded',
-                    'name' => $user->name]);
+                    'name' => $user->firstname .' '.$user->lastname]);
             }
         } catch (JWTException $e) {
             return response()->json(['message' => $e->getMessage()], 500);

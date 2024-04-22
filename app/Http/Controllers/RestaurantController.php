@@ -15,10 +15,10 @@ class RestaurantController extends Controller
 {
     public function index(Request $request){
         $restaurants = Restaurant::all();
-        if($restaurants){
-            return response()->json($restaurants,'200');
-        }else{
+        if($restaurants->isEmpty()){
             return response()->json(['message'=>'No Restaurants Founded'],'404');
+        }else{
+            return response()->json($restaurants,'200');
         }
     }
 
