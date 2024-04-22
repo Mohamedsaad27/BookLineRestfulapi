@@ -1,6 +1,8 @@
     <?php
 
+    use App\Http\Controllers\AppointmentController;
     use App\Http\Controllers\AuthController;
+    use App\Http\Controllers\ClinicController;
     use App\Http\Controllers\HomeController;
     use App\Http\Controllers\RestaurantController;
     use Illuminate\Http\Request;
@@ -29,13 +31,21 @@
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         return $request->user();
     });
-
+    // Hotels Routes
     Route::resource('hotels', \App\Http\Controllers\HotelController::class)->middleware(['auth:api','verify.token']);
     Route::post('bookRoom',[\App\Http\Controllers\BookingRoomController::class,'bookingRoom'])->middleware(['auth:api','verify.token']);
 
+
+    // Restaurants Routes
     Route::group(['middleware' => [ 'auth:api','verify.token']], function () {
         Route::get('restaurants', [RestaurantController::class, 'index']);
         Route::get('restaurant_details/{restaurant_id}', [RestaurantController::class, 'restaurantDetails']);
         Route::post('bookRestaurant/{id}', [RestaurantController::class, 'bookRestaurant']);
     });
 
+    // Clinics Routes
+    Route::group(['middleware' => [ 'auth:api','verify.token']], function () {
+        Route::get('doctors', [AppointmentController::class, 'doctors']);
+        Route::get('clinics', [AppointmentController::class, 'clinics']);
+        Route::post('book-appointment', [AppointmentController::class, 'bookAppointment']);
+    });

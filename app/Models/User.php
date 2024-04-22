@@ -51,6 +51,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Reservation::class);
     }
+    public function appointments(){
+        return $this->hasMany(Appointment::class);
+    }
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
