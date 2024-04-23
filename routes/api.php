@@ -52,3 +52,8 @@
     });
 
     Route::get('search',[SearchController::class,'search'])->middleware('auth:api');
+
+    Route::group(['middleware' => [ 'auth:api','verify.token']], function () {
+        Route::post('book-taxi', [\App\Http\Controllers\TaxiController::class, 'bookTaxi']);
+    });
+
