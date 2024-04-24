@@ -9,9 +9,9 @@ class Restaurant extends Model
 {
     use HasFactory;
     protected $table = 'restaurants';
-    protected $fillable = ['Restaurant_Name'];
+    protected $fillable = ['Restaurant_Name','image'];
 
-    public function reservations($query)
+    public function reservations()
     {
         return $this->hasMany(Reservation::class);
     }

@@ -12,6 +12,7 @@ class Clinic extends Model
     protected $fillable = [
         'ClinicName',
         'ClinicLocation',
+        'image'
     ];
 
     public function appointments(){

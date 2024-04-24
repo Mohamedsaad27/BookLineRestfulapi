@@ -19,21 +19,20 @@ class VerifyToken
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            $token = $request->token;
-            if($token){
-              $user = JWTAuth::parseToken()->authenticate();
+            $token = $request->bearerToken();
+            if ($token) {
+                JWTAuth::setToken($token)->authenticate();
             }
-        }catch (\Exception $exception){
-            if ($exception instanceof TokenInvalidException){
-                return response()->json(['message'=>'Token Is Invalid']);
-            }
-            elseif ($exception instanceof TokenExpiredException){
-                return response()->json(['message'=>'Token Is expired']);
-            }
-            else{
-                return response()->json(['message'=>'another exception']);
+        } catch (\Exception $exception) {
+            if ($exception instanceof TokenInvalidException) {
+                return response()->json(['message' => 'Token is invalid'], 401);
+            } elseif ($exception instanceof TokenExpiredException) {
+                return response()->json(['message' => 'Token is expired'], 401);
+            } else {
+                return response()->json(['message' => 'An error occurred'], 500);
             }
         }
+
         return $next($request);
     }
 }

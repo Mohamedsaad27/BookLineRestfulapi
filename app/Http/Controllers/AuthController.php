@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -66,12 +67,15 @@ class AuthController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
-        return response()->json([
-            'message' => 'Successfully logged out',
-        ]);
+       try{
+        $token = $request->bearerToken();
+        JWTAuth::setToken($token)->invalidate();
+           return response()->json(['message' => 'Logged out successfully']);
+       }catch (\Exception $exception){
+           return response()->json(['message' => 'An error occurred'], 500);
+       }
     }
 
     public function refresh()

@@ -6,6 +6,7 @@
     use App\Http\Controllers\HomeController;
     use App\Http\Controllers\RestaurantController;
     use App\Http\Controllers\SearchController;
+    use App\Http\Controllers\TaxiController;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,7 @@
     Route::get('search',[SearchController::class,'search'])->middleware('auth:api');
 
     Route::group(['middleware' => [ 'auth:api','verify.token']], function () {
-        Route::post('book-taxi', [\App\Http\Controllers\TaxiController::class, 'bookTaxi']);
+        Route::get('taxis', [TaxiController::class, 'index']);
+        Route::post('book-taxi', [TaxiController::class, 'bookTaxi']);
     });
 

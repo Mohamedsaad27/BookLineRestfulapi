@@ -14,5 +14,6 @@ class Hotel extends Model
         'hotel_location',
         'hotel_phone',
         'Room_Price'
+        ,'image'
     ];
 }
