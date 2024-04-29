@@ -4,6 +4,7 @@
     use App\Http\Controllers\AuthController;
     use App\Http\Controllers\ClinicController;
     use App\Http\Controllers\HomeController;
+    use App\Http\Controllers\MenuController;
     use App\Http\Controllers\RestaurantController;
     use App\Http\Controllers\SearchController;
     use App\Http\Controllers\TaxiController;
@@ -59,3 +60,5 @@
         Route::post('book-taxi', [TaxiController::class, 'bookTaxi']);
     });
 
+    Route::get('get-menu-by-restaurant-id/{id}',[MenuController::class,'getMenuByRestaurantId'])
+            ->middleware('auth:api');
