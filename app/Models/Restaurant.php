@@ -8,11 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Restaurant extends Model
 {
     use HasFactory;
-    protected $table = 'restaurants';
-    protected $fillable = ['Restaurant_Name','image'];
 
-    public function reservations()
+    protected $primaryKey = 'Restaurant_id';
+
+    protected $fillable = [
+        'Restaurant_Name',
+        'image'
+    ];
+
+    public function menus()
     {
-        return $this->hasMany(Reservation::class);
+        return $this->hasMany(Menu::class, 'restaurant_id', 'Restaurant_id');
     }
 }
+

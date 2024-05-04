@@ -22,18 +22,18 @@ class RestaurantController extends Controller
         }
     }
 
-    public function restaurantDetails(Request $request,$restaurant_id){
-        $restaurantsDetails = Restaurant::where('Restaurant_id','=',$restaurant_id)->first();
+    public function restaurantDetails(Request $request, $restaurant_id)
+    {
+        $restaurantsDetails = Restaurant::with('menus')->find($restaurant_id);
         try {
-            if($restaurantsDetails){
-                return response()->json($restaurantsDetails,'200');
-            }else{
-                return response()->json(['message'=>'No Restaurant Founded'],'404');
+            if ($restaurantsDetails) {
+                return response()->json($restaurantsDetails, 200);
+            } else {
+                return response()->json(['message' => 'No Restaurant Found'], 404);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
-
     }
 
     public function bookRestaurant(Request $request, $id){
