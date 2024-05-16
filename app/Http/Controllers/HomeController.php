@@ -32,25 +32,38 @@ class HomeController extends Controller
 
                 if ($appointments->isEmpty() && $taxiBookings->isEmpty() && $reservations->isEmpty() && $hotelBookings->isEmpty()) {
                     return response()->json([
-                            'name' => $user->firstname .' '.$user->lastname,
-                            'message' => 'No appointments, taxi bookings, reservations, or hotel bookings found',
+                        'message' => 'User Found',
+                        'name' => $user->name,
+                        'ClinicAppointment' => null,
+                        'taxiBookings' => null,
+                        'restaurantReservations' => null,
+                        'hotelBookings' => null,
                     ]);
-                } else {
+                }
+                else {
                     $responseData = [
                         'message' => 'User Found',
-                        'name' => $user->firstname .' '.$user->lastname,
+                        'name' => $user->name,
                     ];
                     if (!$appointments->isEmpty()) {
                         $responseData['ClinicAppointment'] = $appointments;
+                    }else{
+                        $responseData['ClinicAppointment'] = null;
                     }
                     if (!$taxiBookings->isEmpty()) {
                         $responseData['taxiBookings'] = $taxiBookings;
+                    }else{
+                        $responseData['taxiBookings'] = null;
                     }
                     if (!$reservations->isEmpty()) {
                         $responseData['restaurantReservations'] = $reservations;
+                    }else{
+                        $responseData['restaurantReservations'] = null;
                     }
                     if (!$hotelBookings->isEmpty()) {
                         $responseData['hotelBookings'] = $hotelBookings;
+                    }else{
+                        $responseData['hotelBookings'] = null;
                     }
 
                     return response()->json($responseData);

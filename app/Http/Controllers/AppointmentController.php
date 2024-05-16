@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Doctor;
+use App\Models\DoctorClinic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-
 class AppointmentController extends Controller
 {
     public function doctors(){
@@ -70,5 +70,25 @@ class AppointmentController extends Controller
             return response()->json(['message' => 'Failed to book appointment'], 500);
         }
     }
+
+
+    public function getDoctorsByClinicId(Request $request, $clinic_id)
+    {
+        try {
+            $doctors = DoctorClinic::with('doctor')
+            ->where('ClinicID',$clinic_id)->get();
+            if ($doctors->isEmpty()) {
+                return response()->json(['message' => 'No Doctors Found'], 404);
+            }
+            return response()->json([
+                'message'=> 'Doctors Retrieved Successfully',
+                'data'=> $doctors,
+            ],200);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
+    }
+
+
 
 }

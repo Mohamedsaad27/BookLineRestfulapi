@@ -50,6 +50,7 @@
     Route::group(['middleware' => [ 'auth:api','verify.token']], function () {
         Route::get('doctors', [AppointmentController::class, 'doctors']);
         Route::get('clinics', [AppointmentController::class, 'clinics']);
+        Route::get('doctors-by-clinic-id/{clinic_id}', [AppointmentController::class, 'getDoctorsByClinicId']);
         Route::post('book-appointment', [AppointmentController::class, 'bookAppointment']);
     });
 

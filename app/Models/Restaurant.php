@@ -13,7 +13,8 @@ class Restaurant extends Model
 
     protected $fillable = [
         'Restaurant_Name',
-        'image'
+        'image',
+        'Restaurant_address'
     ];
 
     public function menus()

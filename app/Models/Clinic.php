@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Clinic extends Model
 {
     use HasFactory;
-    protected $table = 'clinics';
+protected $table = 'clinics';
+    protected $primaryKey = 'ClinicID';
     protected $fillable = [
         'ClinicName',
         'ClinicLocation',
         'image'
     ];
 
-    public function appointments(){
-        return $this->hasMany(Appointment::class);
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'doctor_clinic', 'ClinicID', 'DoctorID');
     }
 }
