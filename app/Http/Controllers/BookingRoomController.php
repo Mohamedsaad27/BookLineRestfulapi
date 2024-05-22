@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room_Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class BookingRoomController extends Controller
@@ -51,6 +53,22 @@ class BookingRoomController extends Controller
 
         return response()->json($data,'200');
     }
+    public function deleteBookingRoom(Request $request, $booking_id){
+        try {
+            $booking = Room_Booking::find($booking_id);
+            if(!$booking){
+                return response()->json(['message'=>'No Booking On This Room Found'],404);
+            }
+            $today  = Carbon::now()->format('Y-m-d');
+            $appointmentDate = Carbon::parse($booking->booking_time)->format('Y-m-d');
+            if($today === $appointmentDate){
+                return response()->json(['message' => 'You cannot delete an booking scheduled for today'], 403);
+            }
+            $booking->delete();
+            return response()->json(['message' => 'Booking deleted successfully'], 200);
 
-
+        }catch (\Exception $exception){
+            return response()->json(['message'=>$exception->getMessage()],500);
+        }
+    }
 }

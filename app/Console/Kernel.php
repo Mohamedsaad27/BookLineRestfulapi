@@ -10,9 +10,20 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('app:delete-appointment-when-created-at-matches')
+            ->everyMinute()
+            ->timezone('Africa/Cairo');
+        $schedule->command('app:delete-booking-taxi-when-time-match-now')
+            ->everyMinute()
+            ->timezone('Africa/Cairo');
+        $schedule->command('app:delete-booking-restaurant-when-created-at-matches')
+            ->everyMinute()
+            ->timezone('Africa/Cairo');
+        $schedule->command('app:delete-room-bookings-when-minute-matches')
+            ->everyMinute()
+            ->timezone('Africa/Cairo');
     }
 
     /**

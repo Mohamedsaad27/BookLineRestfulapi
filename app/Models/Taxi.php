@@ -9,6 +9,7 @@ class Taxi extends Model
 {
     use HasFactory;
     protected $table = 'taxi';
+    protected $primaryKey = 'Booking_id';
     protected $fillable = [
         'Booking_id',
         'name',

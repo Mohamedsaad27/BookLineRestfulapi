@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Reservation;
 use App\Models\Restaurant;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\JWT;
@@ -62,4 +64,23 @@ class RestaurantController extends Controller
         return response()->json($data, 200);
     }
 
+    public function deleteBooking(Request $request , $booking_id){
+        try {
+            $reservation = Reservation::find($booking_id);
+            if(!$reservation){
+                return response()->json(['message'=>'No Reservation Found'],404);
+            }
+            $today  = Carbon::now()->format('Y-m-d');
+            $reservationDate = Carbon::parse($reservation->created_at)->format('Y-m-d');
+
+            if($today === $reservationDate){
+                return response()->json(['message' => 'You cannot delete an reservation scheduled for today'], 403);
+            }
+            $reservation->delete();
+            return response()->json(['message' => 'Reservation deleted successfully'], 200);
+        }catch (\Exception $exception){
+            return response()->json(['message'=>$exception->getMessage()],500);
+        }
+
+    }
 }

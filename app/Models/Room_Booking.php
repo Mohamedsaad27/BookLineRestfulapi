@@ -9,6 +9,7 @@ class Room_Booking extends Model
 {
     use HasFactory;
     protected $table = 'room_bookings';
+    protected $primaryKey = 'booking_id';
     protected $fillable = [
         'booking_id',
         'first_name',

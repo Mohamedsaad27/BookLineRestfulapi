@@ -9,6 +9,8 @@ use App\Models\DoctorClinic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class AppointmentController extends Controller
 {
     public function doctors(){
@@ -34,7 +36,6 @@ class AppointmentController extends Controller
             return response()->json(['message'=>$exception->getMessage()]);
         }
     }
-
     public function bookAppointment(Request $request){
         $appointmentTime = Carbon::createFromFormat('h:i A', $request->input('AppointmentTime'))->format('H:i:s');
         $appointmentDate = Carbon::createFromFormat('m/d/Y', $request->input('AppointmentDate'))->format('Y-m-d');
@@ -70,8 +71,6 @@ class AppointmentController extends Controller
             return response()->json(['message' => 'Failed to book appointment'], 500);
         }
     }
-
-
     public function getDoctorsByClinicId(Request $request, $clinic_id)
     {
         try {
@@ -88,7 +87,24 @@ class AppointmentController extends Controller
             return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
+    public function deleteAppointment(Request $request , $appointment_id){
+        try {
+            $appointment = Appointment::find($appointment_id);
+            if(!$appointment){
+                return response()->json(['message'=>'No Appointment Found'],404);
+            }
+            $today  = Carbon::now()->format('Y-m-d');
+            $appointmentDate = Carbon::parse($appointment->AppointmentDate)->format('Y-m-d');
 
+            if($today === $appointmentDate){
+                return response()->json(['message' => 'You cannot delete an appointment scheduled for today'], 403);
+            }
+            $appointment->delete();
+            return response()->json(['message' => 'Appointment deleted successfully'], 200);
+        }catch (\Exception $exception){
+            return response()->json(['message'=>$exception->getMessage()],500);
+        }
+    }
 
 
 }

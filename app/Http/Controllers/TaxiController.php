@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Taxi;
 use App\Models\TaxiDetails;
 use Carbon\Carbon;
@@ -50,4 +51,24 @@ class TaxiController extends Controller
         return response()->json(['data'=>$taxi,'message' =>'taxi booked successful'], 200);
 
     }
+
+    public function cancelBookTaxi(Request $request, $booking_id)
+    {
+        try {
+            $bookedTaxi = Taxi::find($booking_id);
+            if (!$bookedTaxi) {
+                return response()->json(['message' => 'No Booking Found'], 404);
+            }
+            $now = Carbon::now();
+            $bookingTime = Carbon::parse($bookedTaxi->time);
+            if ($now->diffInMinutes($bookingTime, false) <= 30) {
+                return response()->json(['message' => 'You cannot cancel a taxi booking within 30 minutes of the scheduled time'], 403);
+            }
+            $bookedTaxi->delete();
+            return response()->json(['message' => 'Taxi Booking Cancelled successfully'], 200);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
+    }
+
 }
