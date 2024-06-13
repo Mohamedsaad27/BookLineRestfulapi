@@ -12,14 +12,20 @@ use Illuminate\Support\Facades\DB;
 
 class TaxiController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request) {
         $taxis = TaxiDetails::all();
-        if($taxis->isEmpty()){
-            return response()->json(['message'=>'No Taxis Founded'],'404');
-        }else{
-            return response()->json($taxis,'200');
+
+        if ($taxis->isEmpty()) {
+            return response()->json(['message' => 'No Taxis Found'], 404);
+        } else {
+            $taxis = $taxis->map(function ($taxi) {
+                $taxi->image = '/storage/taxisImages/' . $taxi->image;
+                return $taxi;
+            });
+            return response()->json(['taxis' => $taxis], 200);
         }
     }
+
     public function bookTaxi(Request $request): \Illuminate\Http\JsonResponse
     {
         $time = Carbon::createFromFormat('h:i A', $request->input('time'))->format('H:i:s');

@@ -13,6 +13,9 @@ class HotelController extends Controller
     public function index()
     {
         $hotels=Hotel::all();
+        $hotels->each(function ($hotel){
+            $hotel->image = '/storage/hotelImages/' . $hotel->image;
+        });
         return response()->json($hotels,'200');
     }
 
@@ -20,8 +23,14 @@ class HotelController extends Controller
     public function show(string $id)
     {
         $hotel=Hotel::get()->where('hotel_ID',$id)->first();
-        if($hotel) return response()->json($hotel);
-        return response()->json('not found','404');
+
+        if(!$hotel){
+            return response()->json('not found','404');
+        }else{
+                $hotel->image = '/storage/hotelImages/' . $hotel->image;
+        return response()->json($hotel);
+    }
+
     }
 
 

@@ -20,16 +20,25 @@ class RestaurantController extends Controller
         if($restaurants->isEmpty()){
             return response()->json(['message'=>'No Restaurants Founded'],'404');
         }else{
+           $restaurants = $restaurants->map(function ($restaurants){
+               $restaurants->image =  '/storage/restaurantImages/' . $restaurants->image;
+               return $restaurants;
+           });
             return response()->json($restaurants,'200');
         }
     }
 
     public function restaurantDetails(Request $request, $restaurant_id)
     {
-        $restaurantsDetails = Restaurant::with('menus')->find($restaurant_id);
         try {
-            if ($restaurantsDetails) {
-                return response()->json($restaurantsDetails, 200);
+            $restaurantDetails = Restaurant::with('menus')->find($restaurant_id);
+
+            if ($restaurantDetails) {
+                $restaurantDetails->image = '/storage/restaurantImages/' . $restaurantDetails->image;
+                $restaurantDetails->menus->each(function ($menuItem){
+                    $menuItem->item_image = '/storage/menuImages/' . $menuItem->item_image;
+                });
+                return response()->json($restaurantDetails, 200);
             } else {
                 return response()->json(['message' => 'No Restaurant Found'], 404);
             }
@@ -37,6 +46,7 @@ class RestaurantController extends Controller
             return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
+
 
     public function bookRestaurant(Request $request, $id){
         $valid = validator($request->all(), [

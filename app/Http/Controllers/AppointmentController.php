@@ -19,6 +19,10 @@ class AppointmentController extends Controller
             if($doctors->isEmpty()){
                 return response()->json(['message'=>'No Doctors Founded'],404);
             }
+            $doctors = $doctors->map(function ($doctors) {
+                $doctors->image = '/storage/doctorsImages/' . $doctors->image;
+                return $doctors;
+            });
             return response()->json($doctors,200);
         }catch (\Exception $exception){
             return response()->json(['message'=>$exception->getMessage()]);
@@ -31,6 +35,10 @@ class AppointmentController extends Controller
             if($clinics->isEmpty()){
                 return response()->json(['message'=>'No Clinic Founded'],404);
             }
+            $clinics = $clinics->map(function ($clinics) {
+                $clinics->image = '/storage/clinicsImages/' . $clinics->image;
+                return $clinics;
+            });
             return response()->json($clinics,200);
         }catch (\Exception $exception){
             return response()->json(['message'=>$exception->getMessage()]);

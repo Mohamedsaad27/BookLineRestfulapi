@@ -15,6 +15,9 @@ class MenuController extends Controller
             {
                 return response()->json(['message' => 'No Menu For This Restaurant'], 404);
             }
+            $menuByRestaurantId->each(function ($menuItem) {
+                $menuItem->item_image = '/storage/menuImages/' . $menuItem->item_image;
+            });
             return response()->json(['data' => $menuByRestaurantId, 'message' => 'Menu Retrieved Successfully'], 200);
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
