@@ -82,19 +82,28 @@ class AppointmentController extends Controller
     public function getDoctorsByClinicId(Request $request, $clinic_id)
     {
         try {
-            $doctors = DoctorClinic::with('doctor')
-            ->where('ClinicID',$clinic_id)->get();
-            if ($doctors->isEmpty()) {
+            $doctorClinics = DoctorClinic::with('doctor')
+                ->where('ClinicID', $clinic_id)->get();
+
+            if ($doctorClinics->isEmpty()) {
                 return response()->json(['message' => 'No Doctors Found'], 404);
             }
+
+            $doctors = $doctorClinics->pluck('doctor');
+
+            $doctors->each(function($eachDoctor) {
+                $eachDoctor->image = '/storage/doctorsImages/' . $eachDoctor->image;
+            });
+
             return response()->json([
-                'message'=> 'Doctors Retrieved Successfully',
-                'data'=> $doctors,
-            ],200);
+                'message' => 'Doctors Retrieved Successfully',
+                'data' => $doctors,
+            ], 200);
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
+
     public function deleteAppointment(Request $request , $appointment_id){
         try {
             $appointment = Appointment::find($appointment_id);

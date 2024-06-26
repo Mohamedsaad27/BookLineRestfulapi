@@ -48,20 +48,24 @@ class RestaurantController extends Controller
     }
 
 
-    public function bookRestaurant(Request $request, $id){
+    public function bookRestaurant(Request $request,$id){
         $valid = validator($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|email|unique:reservations,email',
+            'email' => 'required|email',
             'members' => 'required|int',
-            'user_id' => 'required|int|exists:users,id',
-            'restaurant_id' => 'required|int|exists:restaurants,Restaurant_id'
         ]);
+            $validateRestaurantId = Restaurant::find($id);
+            if(!$validateRestaurantId){
+                return response()->json([
+                    'message' => 'No Restaurant Found',
+                ], 404);
 
+            }
         if ($valid->fails()) {
             return response()->json($valid->errors(), 400);
         }
 
-        $user_id = $request->user_id;
+        $user_id = Auth::id();
         $data = $request->only(['name', 'email', 'members']);
 
         $reservationData = array_merge($data, [
@@ -71,7 +75,11 @@ class RestaurantController extends Controller
 
         DB::table('reservations')->insert($reservationData);
 
-        return response()->json($data, 200);
+        return response()->json([
+            'message' => 'The restaurant has been booked successfully',
+            'data' => $data
+        ], 200);
+
     }
 
     public function deleteBooking(Request $request , $booking_id){

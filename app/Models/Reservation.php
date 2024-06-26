@@ -21,6 +21,6 @@ class Reservation extends Model
         return $this->belongsTo(User::class);
     }
     public function restaurant(){
-        return $this->belongsTo(Restaurant::class);
+        return $this->belongsTo(Restaurant::class,'Restaurant_id');
     }
 }
