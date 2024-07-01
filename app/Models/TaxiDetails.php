@@ -18,4 +18,7 @@ class TaxiDetails extends Model
         'Availability',
         'price',
     ];
+    public function bookings(){
+        return $this->hasMany(Taxi::class);
+    }
 }

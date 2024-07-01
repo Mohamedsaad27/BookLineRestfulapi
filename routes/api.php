@@ -36,6 +36,10 @@
     });
     // Hotels Routes
     Route::resource('hotels', \App\Http\Controllers\HotelController::class)->middleware(['auth:api','verify.token']);
+    Route::get('rooms/{hotel_id}', [\App\Http\Controllers\HotelController::class,'getRoomsByHotel'])
+        ->middleware(['auth:api','verify.token']);
+    Route::get('add-room', [\App\Http\Controllers\HotelController::class,'addRoom'])
+        ->middleware(['auth:api','verify.token']);
     Route::post('bookRoom',[\App\Http\Controllers\BookingRoomController::class,'bookingRoom'])->middleware(['auth:api','verify.token']);
     Route::post('delete-book-Room/{booking_id}',[\App\Http\Controllers\BookingRoomController::class,'deleteBookingRoom'])->middleware(['auth:api','verify.token']);
 

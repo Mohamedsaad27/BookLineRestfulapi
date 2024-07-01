@@ -20,5 +20,9 @@ class Taxi extends Model
         'date',
         'time',
         'user_id',
+        'taxi_id'
     ];
+    public function taxi(){
+        return $this->belongsTo(TaxiDetails::class,'taxi_id');
+    }
 }

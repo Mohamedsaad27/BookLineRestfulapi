@@ -28,34 +28,39 @@ class TaxiController extends Controller
 
     public function bookTaxi(Request $request): \Illuminate\Http\JsonResponse
     {
-        $time = Carbon::createFromFormat('h:i A', $request->input('time'))->format('H:i:s');
-        $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format('Y-m-d');
         $validInputs = validator($request->all(), [
             'passengers' => 'required|int',
-            'startDestination' => 'required|string',
-            'endDestination' => 'required|string',
+            'startDestination' => 'required|date_format:Y-m-d H:i:s',
+            'endDestination' => 'required|date_format:Y-m-d H:i:s',
             'time' => 'required|date_format:h:i A',
             'date' => 'required|date_format:m/d/Y',
             'name' => 'required|string',
             'phoneNumber' => 'required|string|unique:appointments,phone',
+            'taxi_id' => 'required|int|exists:taxi_details,id'
         ]);
+
         if ($validInputs->fails()) {
-            return response()->json($validInputs->errors(), '400');
+            return response()->json($validInputs->errors(), 400);
         }
+
+        $time = Carbon::createFromFormat('h:i A', $request->input('time'))->format('H:i:s');
+        $date = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format('Y-m-d');
+
         $taxi = [
             'passengers' => $request->passengers,
-            'startDestination' => $request->startDestination,
-            'endDestination' => $request->endDestination,
+            'startDestination' => Carbon::createFromFormat('Y-m-d H:i:s', $request->startDestination)->format('Y-m-d H:i:s'),
+            'endDestination' => Carbon::createFromFormat('Y-m-d H:i:s', $request->endDestination)->format('Y-m-d H:i:s'),
             'user_ID' => Auth::id(),
             'time' => $time,
             'date' => $date,
             'name' => $request->name,
             'phoneNumber' => $request->phoneNumber,
+            'taxi_id' => $request->taxi_id
         ];
+
         DB::table('taxi')->insert($taxi);
 
-        return response()->json(['data'=>$taxi,'message' =>'taxi booked successful'], 200);
-
+        return response()->json(['data' => $taxi, 'message' => 'Taxi booked successfully'], 200);
     }
 
     public function cancelBookTaxi(Request $request, $booking_id)

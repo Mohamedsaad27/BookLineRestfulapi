@@ -8,21 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 class Room_Booking extends Model
 {
     use HasFactory;
+
     protected $table = 'room_bookings';
+    public $timestamps = false;
     protected $primaryKey = 'booking_id';
     protected $fillable = [
-        'booking_id',
         'first_name',
         'last_name',
         'email',
-        'room_type'
-        ,'Room_Number'
-        ,'hotel_ID'
-        ,'hotel_Name'
-        ,'user_id'
-        ,'booking_time'
-        ,'special_requests'
-        ,'num_guests'
+        'room_id',
+        'hotel_ID',
+        'user_id',
+        'booking_time',
+        'special_requests',
+        'num_guests'
     ];
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
+    }
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class, 'hotel_ID');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
+
