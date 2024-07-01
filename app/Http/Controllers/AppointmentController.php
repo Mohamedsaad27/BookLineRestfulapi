@@ -51,7 +51,6 @@ class AppointmentController extends Controller
         $validInputs = validator($request->all(), [
             'ClinicID' => 'required|int|exists:clinics,ClinicID',
             'DoctorID' => 'required|int|exists:doctors,DoctorID',
-            'user_ID' => 'required|int|exists:users,id',
             'AppointmentTime' => 'required|date_format:h:i A',
             'AppointmentDate' => 'required|date_format:m/d/Y',
             'PatientName' => 'required|string',
