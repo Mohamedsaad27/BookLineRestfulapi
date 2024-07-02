@@ -19,7 +19,7 @@ class TaxiController extends Controller
             return response()->json(['message' => 'No Taxis Found'], 404);
         } else {
             $taxis = $taxis->map(function ($taxi) {
-                $taxi->image = '/storage/taxisImages/' . $taxi->image;
+                $taxi->image = '/storage/' . $taxi->image;
                 return $taxi;
             });
             return response()->json(['taxis' => $taxis], 200);

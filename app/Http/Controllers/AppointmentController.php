@@ -20,7 +20,7 @@ class AppointmentController extends Controller
                 return response()->json(['message'=>'No Doctors Founded'],404);
             }
             $doctors = $doctors->map(function ($doctors) {
-                $doctors->image = '/storage/doctorsImages/' . $doctors->image;
+                $doctors->image = '/storage/' . $doctors->image;
                 return $doctors;
             });
             return response()->json($doctors,200);
@@ -36,7 +36,7 @@ class AppointmentController extends Controller
                 return response()->json(['message'=>'No Clinic Founded'],404);
             }
             $clinics = $clinics->map(function ($clinics) {
-                $clinics->image = '/storage/clinicsImages/' . $clinics->image;
+                $clinics->image = '/storage/' . $clinics->image;
                 return $clinics;
             });
             return response()->json($clinics,200);
@@ -91,7 +91,7 @@ class AppointmentController extends Controller
             $doctors = $doctorClinics->pluck('doctor');
 
             $doctors->each(function($eachDoctor) {
-                $eachDoctor->image = '/storage/doctorsImages/' . $eachDoctor->image;
+                $eachDoctor->image = '/storage/' . $eachDoctor->image;
             });
 
             return response()->json([

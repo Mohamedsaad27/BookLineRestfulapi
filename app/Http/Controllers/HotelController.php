@@ -15,7 +15,7 @@ class HotelController extends Controller
     {
         $hotels=Hotel::all();
         $hotels->each(function ($hotel){
-            $hotel->image = '/storage/hotelImages/' . $hotel->image;
+            $hotel->image = '/storage/' . $hotel->image;
         });
         return response()->json($hotels,'200');
     }
@@ -26,7 +26,7 @@ class HotelController extends Controller
         if(!$hotel){
             return response()->json('not found','404');
         }else{
-                $hotel->image = '/storage/hotelImages/' . $hotel->image;
+                $hotel->image = '/storage/' . $hotel->image;
         return response()->json($hotel);
     }
 

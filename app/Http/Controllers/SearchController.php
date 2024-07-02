@@ -24,14 +24,14 @@ class SearchController extends Controller
                     ->orWhere('driver_name', 'like', "%$query%")
                     ->paginate($perPage);
                 $results->each(function ($taxi) {
-                    $taxi->image = '/storage/taxiImages/' . $taxi->image;
+                    $taxi->image = '/storage/' . $taxi->image;
                 });
                 break;
             case 'restaurant':
                 $results = Restaurant::where('Restaurant_Name', 'like', "%$query%")
                     ->paginate($perPage);
                 $results->each(function ($restaurant) {
-                    $restaurant->image = '/storage/restaurantImages/' . $restaurant->image;
+                    $restaurant->image = '/storage/' . $restaurant->image;
                 });
                 break;
             case 'clinic':
@@ -39,7 +39,7 @@ class SearchController extends Controller
                     ->orWhere('ClinicLocation', 'like', "%$query%")
                     ->paginate($perPage);
                 $results->each(function ($clinic) {
-                    $clinic->image = '/storage/clinicImages/' . $clinic->image;
+                    $clinic->image = '/storage/' . $clinic->image;
                 });
                 break;
             case 'hotel':
@@ -47,7 +47,7 @@ class SearchController extends Controller
                     ->orWhere('hotel_location', 'like', "%$query%")
                     ->paginate($perPage);
                 $results->each(function ($hotel) {
-                    $hotel->image = '/storage/hotelImages/' . $hotel->image;
+                    $hotel->image = '/storage/' . $hotel->image;
                 });
                 break;
             default:
